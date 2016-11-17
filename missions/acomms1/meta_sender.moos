@@ -18,7 +18,7 @@ ProcessConfig = ANTLER
 {
     MSBetweenLaunches=0
 
-    Run = MOOSDB @ NewConsole = false
+    Run = MOOSDB @ NewConsole = true
 
     Run = pMOOSBridge @ NewConsole = false ~ pMOOSBridge_$(COMMUNITY)
 
@@ -39,8 +39,8 @@ ProcessConfig = ANTLER
 
 ProcessConfig = pAcommsExample
 {
-    post_interval1 = 4
-    post_interval2 = 1e100
+    post_interval1 = 1
+    post_interval2 = 1
     out_moos_var1 = ACOMMS_EXAMPLE1_OUT
     out_moos_var2 = ACOMMS_EXAMPLE2_OUT
 }

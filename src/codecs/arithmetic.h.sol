@@ -15,8 +15,6 @@
 #include "goby/util/sci.h" // for ceil_log2
 #include "goby/util/primitive_types.h" // for goby::uint32, etc
 
-using namespace std; 
-
 //#define ARITHMETIC_TEST
 
 class ArithmeticCodec :

@@ -10,7 +10,7 @@ ProcessConfig = ANTLER
 {
     MSBetweenLaunches=0
 
-    Run = MOOSDB @ NewConsole = false
+    Run = MOOSDB @ NewConsole = true
 
     Run = pMOOSBridge @ NewConsole = false ~ pMOOSBridge_sender
 
@@ -47,14 +47,14 @@ ProcessConfig = pAcommsHandler_sender
     queue_cfg { 
         message_entry {  
             protobuf_name: "AcommsExampleMessage1"
-            newest_first: false
+            newest_first: true
             ttl: 1800  # in seconds
             value_base: 1  # relative to other messages
-            max_queue: 100 # limit on number of messages in queue
+            max_queue: 100  # limit on number of messages in queue
         }
         message_entry {  
             protobuf_name: "AcommsExampleMessage2"
-            newest_first: false
+            newest_first: true
             ttl: 1800  
             value_base: 1  
             max_queue: 100
@@ -105,8 +105,8 @@ ProcessConfig = pAcommsHandler_sender
 
 ProcessConfig = pAcommsExample
 {
-    post_interval1 = 4
-    post_interval2 = 1e100
+    post_interval1 = 1
+    post_interval2 = 1
     out_moos_var1 = ACOMMS_EXAMPLE1_OUT
     out_moos_var2 = ACOMMS_EXAMPLE2_OUT
 }

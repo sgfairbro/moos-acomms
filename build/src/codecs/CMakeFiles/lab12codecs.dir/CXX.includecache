@@ -512,27 +512,3 @@ goby/util/sci.h
 goby/util/primitive_types.h
 /home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/goby/util/primitive_types.h
 
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/codec_load.cpp
-codec_load.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/codec_load.h
-varint.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/varint.h
-arithmetic.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/arithmetic.h
-
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/codec_load.h
-goby/acomms/dccl/dccl.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/goby/acomms/dccl/dccl.h
-
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/varint.cpp
-varint.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/varint.h
-
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/varint.h
-goby/acomms/dccl.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/goby/acomms/dccl.h
-goby/util/as.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/goby/util/as.h
-goby/util/primitive_types.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/codecs/goby/util/primitive_types.h
-

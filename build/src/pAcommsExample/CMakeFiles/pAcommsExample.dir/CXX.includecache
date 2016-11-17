@@ -1136,12 +1136,6 @@ MOOS/libMOOS/App/MOOSApp.h
 MOOS/libMOOS/App/MOOSInstrument.h
 /home/sgfairbro/moos-ivp/MOOS/MOOSCore/Core/libMOOS/include/MOOS/libMOOS/MOOS/libMOOS/App/MOOSInstrument.h
 
-/home/sgfairbro/moos-ivp/ivp/src/lib_mbutil/ColorParse.h
-vector
--
-string
--
-
 /home/sgfairbro/moos-ivp/ivp/src/lib_mbutil/MBUtils.h
 vector
 -
@@ -1171,14 +1165,6 @@ MOOS/libMOOS/MOOSLib.h
 /home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/pAcommsExample/MOOS/libMOOS/MOOSLib.h
 acomms_example.pb.h
 /home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/pAcommsExample/acomms_example.pb.h
-
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/pAcommsExample/AcommsExample_ExampleConfig.cpp
-iostream
--
-AcommsExample_ExampleConfig.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/pAcommsExample/AcommsExample_ExampleConfig.h
-ColorParse.h
-/home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/pAcommsExample/ColorParse.h
 
 /home/sgfairbro/moos-ivp/moos-ivp-extend-acomms/src/pAcommsExample/AcommsExample_ExampleConfig.h
 
