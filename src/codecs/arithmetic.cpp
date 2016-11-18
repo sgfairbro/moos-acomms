@@ -55,9 +55,48 @@ goby::acomms::Bitset ArithmeticCodec::encode_repeated(const vector<goby::int32>&
 std::vector<goby::int32> ArithmeticCodec::decode_repeated(goby::acomms::Bitset* bits)
 {
 
+    pair<double, double> range = bits_to_range(*bits); 
+    double tag = (range.first + range.second) / 2;
+
+    vector<goby::int32> decoded; 
+    double upper_bound = 1, lower_bound = 0, prev_lower = 0, prev_upper = 0, diff = 0;
+    double prob_fx_n, prob_fx_n_minus_one; 
+
+    while (decoded.size() < max_repeat()){
+
+        prev_lower = lower_bound; 
+        prev_upper = upper_bound; 
+
+        diff = prev_upper - prev_lower;
+
+        prob_fx_n_minus_one = 0; 
+
+        for(map<int, double>::const_iterator it = symbol_probabilities_.begin(),
+                end = symbol_probabilities_.end();
+            it != end;
+            ++it)
+        {
+
+            prob_fx_n = it->second;  
+            lower_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n_minus_one; 
+            upper_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n;
+
+            if (tag > lower_bound && tag < upper_bound){
+                decoded.push_back(it->first); 
+                break; 
+            }
+            else
+                prob_fx_n_minus_one = prob_fx_n; 
+
+        }
+
+    }
+
 #ifdef ARITHMETIC_DEBUG
           
 #endif
+
+    return decoded; 
 
 }
     
