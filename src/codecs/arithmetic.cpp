@@ -58,6 +58,12 @@ std::vector<goby::int32> ArithmeticCodec::decode_repeated(goby::acomms::Bitset* 
     pair<double, double> range = bits_to_range(*bits); 
     double tag = (range.first + range.second) / 2;
 
+#ifdef ARITHMETIC_DEBUG
+    cout << "Decoded lower: " << range.first << endl; 
+    cout << "Decoded upper: " << range.second << endl; 
+    cout << "Tag: " << tag << endl;
+#endif
+
     vector<goby::int32> decoded; 
     double upper_bound = 1, lower_bound = 0, prev_lower = 0, prev_upper = 0, diff = 0;
     double prob_fx_n, prob_fx_n_minus_one; 
@@ -82,19 +88,22 @@ std::vector<goby::int32> ArithmeticCodec::decode_repeated(goby::acomms::Bitset* 
             upper_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n;
 
             if (tag > lower_bound && tag < upper_bound){
+#ifdef ARITHMETIC_DEBUG
+                cout << "Lower bound: " << lower_bound << endl;
+                cout << "Symbol: " << it->first << endl;
+                cout << "Probability: " << it->second << endl;
+                cout << "Upper bound: " << upper_bound << endl;
+#endif
                 decoded.push_back(it->first); 
                 break; 
             }
             else
                 prob_fx_n_minus_one = prob_fx_n; 
 
+
         }
 
     }
-
-#ifdef ARITHMETIC_DEBUG
-          
-#endif
 
     return decoded; 
 
