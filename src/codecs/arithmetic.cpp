@@ -22,16 +22,26 @@ goby::acomms::Bitset ArithmeticCodec::encode_repeated(const vector<goby::int32>&
 #endif
 
     double upper_bound = 1, lower_bound = 0, prev_lower = 0, prev_upper = 0;
-    double prob_fx_n_minus_one = 0;
-    double prob_fx_n = symbol_probabilities_[wire_values[0]];
+    double prob_fx_n_minus_one = 0, prob_fx_n=0; 
 
     //Use the sequence Sayood gives to calculate the upper and lower bounds
     for (int i = 0; i < wire_values.size(); i++){
-
-        prob_fx_n = symbol_probabilities_[wire_values[i]];
-
+        
         prev_lower = lower_bound; 
         prev_upper = upper_bound;
+
+        prob_fx_n_minus_one = 0; 
+
+        std::map<int, double>::const_iterator symbol_it = symbol_probabilities_.find(wire_values[i]);
+
+        for(std::map<int, double>::const_iterator it = symbol_probabilities_.begin();
+            it != symbol_it;
+            ++it)
+        {
+            prob_fx_n_minus_one += it->second;
+        }
+
+        prob_fx_n = prob_fx_n_minus_one + symbol_it->second; 
 
         lower_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n_minus_one; 
         upper_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n;
@@ -41,8 +51,9 @@ goby::acomms::Bitset ArithmeticCodec::encode_repeated(const vector<goby::int32>&
     }
 #ifdef ARITHMETIC_DEBUG
 
-    cout << lower_bound << endl;
-    cout << upper_bound << endl;
+    cout << "Decoded lower bound: " << lower_bound << endl;
+    cout << "Decoded upper bound: " << upper_bound << endl;
+    cout << endl;
 
 #endif
 
@@ -62,6 +73,7 @@ std::vector<goby::int32> ArithmeticCodec::decode_repeated(goby::acomms::Bitset* 
     cout << "Decoded lower: " << range.first << endl; 
     cout << "Decoded upper: " << range.second << endl; 
     cout << "Tag: " << tag << endl;
+    cout << endl;
 #endif
 
     vector<goby::int32> decoded; 
@@ -93,14 +105,13 @@ std::vector<goby::int32> ArithmeticCodec::decode_repeated(goby::acomms::Bitset* 
                 cout << "Symbol: " << it->first << endl;
                 cout << "Probability: " << it->second << endl;
                 cout << "Upper bound: " << upper_bound << endl;
+                cout << endl;
 #endif
                 decoded.push_back(it->first); 
                 break; 
             }
             else
                 prob_fx_n_minus_one = prob_fx_n; 
-
-
         }
 
     }
