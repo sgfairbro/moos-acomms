@@ -65,59 +65,80 @@ goby::acomms::Bitset ArithmeticCodec::encode_repeated(const vector<goby::int32>&
     
 std::vector<goby::int32> ArithmeticCodec::decode_repeated(goby::acomms::Bitset* bits)
 {
+    // `bits` contains min_size_repeated number of bits (here, 3)
+    
+    std::vector<goby::int32> out;
+    int last_symbol = -1; // some symbol that isn't in our map
 
-    pair<double, double> range = bits_to_range(*bits); 
-    double tag = (range.first + range.second) / 2;
+    std::pair<double, double> decoded_range(0, 1);
 
-#ifdef ARITHMETIC_DEBUG
-    cout << "Decoded lower: " << range.first << endl; 
-    cout << "Decoded upper: " << range.second << endl; 
-    cout << "Tag: " << tag << endl;
-    cout << endl;
-#endif
+    // loop until we have (in this case) 5 symbols
+    while(out.size() < max_repeat())
+    {
+        double spread = (decoded_range.second - decoded_range.first);
 
-    vector<goby::int32> decoded; 
-    double upper_bound = 1, lower_bound = 0, prev_lower = 0, prev_upper = 0, diff = 0;
-    double prob_fx_n, prob_fx_n_minus_one; 
+        // see what our minimum bitset gives us for a range. If we're lucky we're done
+        std::pair<double, double> current_range = bits_to_range(*bits);            
 
-    while (decoded.size() < max_repeat()){
+        // place a marker at the lower bound of the known decoded range
+        std::pair<double, double> search_range(decoded_range);
 
-        prev_lower = lower_bound; 
-        prev_upper = upper_bound; 
+        // loop over all the symbols moving our search range
+        // until the computed range `current_range` lies *completely* within the search range
 
-        diff = prev_upper - prev_lower;
-
-        prob_fx_n_minus_one = 0; 
-
-        for(map<int, double>::const_iterator it = symbol_probabilities_.begin(),
+        //  lX     search_range.first
+        //  uX     search_range.second
+        //  l*     current_range.first
+        //  u*     current_range.second
+        //  ||     decoded_range
+        //
+        // e.g.
+        //  |       l*  lX      u*  uX                |        
+        for(std::map<int, double>::const_iterator it = symbol_probabilities_.begin(),
                 end = symbol_probabilities_.end();
             it != end;
             ++it)
         {
-
-            prob_fx_n = it->second;  
-            lower_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n_minus_one; 
-            upper_bound = prev_lower + (prev_upper - prev_lower)*prob_fx_n;
-
-            if (tag > lower_bound && tag < upper_bound){
+            double search_spread = spread*it->second;
+            search_range.second = search_range.first + search_spread;
+            
+            // is the lower bound of the current range inside our symbol's range?
+            if(current_range.first >= search_range.first &&
+               current_range.first < search_range.second)
+            {
+                // |    lX   l*    uX                  |
+                // is the upper bound *also* inside our symbol's range?
+                if (current_range.second <= search_range.second)
+                {
+                    // |    lX   l*  u*  uX                 |
+                    // we've found a symbol!
+                    last_symbol = it->first;
+                    out.push_back(last_symbol);
+                    decoded_range = search_range;
 #ifdef ARITHMETIC_DEBUG
-                cout << "Lower bound: " << lower_bound << endl;
-                cout << "Symbol: " << it->first << endl;
-                cout << "Probability: " << it->second << endl;
-                cout << "Upper bound: " << upper_bound << endl;
-                cout << endl;
+                    std::cout << "found symbol: " << last_symbol << std::endl;
+                    std::cout << "range: [" << decoded_range.first << "," << decoded_range.second << ")" << std::endl;
 #endif
-                decoded.push_back(it->first); 
-                break; 
+                    break;
+                }
+                else
+                {
+                    // |    lX   l*   uX   u*               |
+                    // no go, not enough bits
+                    bits->get_more_bits(1);
+                    break;
+                }
             }
             else
-                prob_fx_n_minus_one = prob_fx_n; 
+            {
+                // |    lX      uX     l*   u*         |
+                // no overlap at all yet, keep moving the marker
+                search_range.first += search_spread;
+            }
         }
-
     }
 
-    return decoded; 
-
+    return out;
 }
     
 unsigned ArithmeticCodec::size_repeated(const std::vector<goby::int32>& field_values)
